@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { forkJoin, Observable, throwError } from 'rxjs';
+import { catchError, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 import { User } from './user';
@@ -20,6 +20,26 @@ export class UserService {
     const url = `${this.apiUrl}users`;
     return this.http.get<User[]>(url).pipe(
       tap(users => console.log('getUsers', users)),
+      switchMap(
+        users => forkJoin(users.map(user => this.getUsersPostsLength(user.id)))
+        .pipe(
+          map( results => users.map( (user, index) => {
+              user.userPosts = results[index];
+              return user;
+            })
+          ),
+          shareReplay(1)
+        )
+      ),
+      catchError(this.handleError)
+    )
+  }
+
+  getUsersPostsLength(userId: number): Observable<number> {
+    const url = `${this.apiUrl}posts?userId=${userId}`;
+    return this.http.get<any[]>(url).pipe(
+      tap(posts => console.log('getUsersPostsLength', posts)),
+      map(posts => posts.length),
       catchError(this.handleError)
     )
   }

@@ -22,4 +22,14 @@ export class UserEffects {
     );
   });
 
+  loadUsersPosts$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(UserActions.loadUsersPostsLength),
+      mergeMap((action) => this.userService.getUsersPostsLength(action.userId).pipe(
+        map(postsLength => UserActions.loadUsersPostsLengthSuccess({ postsLength, userId: action.userId })),
+        catchError(error => of(UserActions.loadUsersPostsLengthFailure({ error })))
+      ))
+    );
+  });
+
 }

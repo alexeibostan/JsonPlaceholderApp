@@ -13,10 +13,16 @@ export class UserListComponent implements OnInit {
   @Input() selectedUser: User | null;
 
   @Output() selected = new EventEmitter<User>();
+  @Output() post = new EventEmitter<User>();
+  @Output() loadUserPosts = new EventEmitter<number>();
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  trackByUserId(user: User) : number {
+    return user.id;
   }
 
 }

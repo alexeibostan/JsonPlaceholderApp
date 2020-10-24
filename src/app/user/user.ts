@@ -8,6 +8,7 @@
         phone: string;
         website: string;
         company: Company;
+        userPosts?: number;
     }
 
     export interface Geo {

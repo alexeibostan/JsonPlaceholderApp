@@ -14,11 +14,14 @@
                 <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                   Company
                 </th>
+                <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Posts
+                </th>
                 <th class="px-6 py-3 bg-gray-50"></th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-              <tr *ngFor="let user of users" [ngClass]="{'bg-gray-400': selectedUser?.id === user.id}">
+              <tr *ngFor="let user of users; trackBy: trackByUserId" [ngClass]="{'bg-gray-400': selectedUser?.id === user.id}">
                 <td class="px-6 py-4 whitespace-no-wrap">
                   <div class="flex items-center">
                     <div class="flex-shrink-0 h-10 w-10">
@@ -44,8 +47,14 @@
                 <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
                     {{user?.company.name}}
                 </td>
+                <td class="px-6 py-4 whitespace-no-wrap">
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                    {{user.userPosts}}
+                  </span>
+                </td>
                 <td class="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
                   <a (click)="selected.emit(user)" class="text-indigo-600 hover:text-indigo-900 cursor-pointer">Edit</a>
+                  <a (click)="post.emit(user)" class="ml-8 text-indigo-600 hover:text-indigo-900 cursor-pointer">Posts</a>
                 </td>
               </tr>
             </tbody>

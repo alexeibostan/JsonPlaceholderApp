@@ -7,13 +7,13 @@ export const userFeatureKey = 'user';
 
 export interface State extends AppState.State {
   user: UserState;
-}
+};
 
 export interface UserState {
   users: User[];
   currentUserId: number | null;
   error: string;
-}
+};
 
 const initialState: UserState = {
   users: [],
@@ -62,6 +62,22 @@ export const userReducer = createReducer<UserState>(
     }
   }),
   on(UserActions.loadUsersFailure, (state, action): UserState => {
+    return {
+      ...state,
+      error: action.error,
+    }
+  }),
+  on(UserActions.loadUsersPostsLengthSuccess, (state, action): UserState => {
+    const updatedUsers = state.users.map(
+      user => user.id === action.userId ? {...user, userPosts: action.postsLength } : user
+      )
+    return {
+      ...state,
+      error: '',
+      users: updatedUsers
+    }
+  }),
+  on(UserActions.loadUsersPostsLengthFailure, (state, action): UserState => {
     return {
       ...state,
       error: action.error,

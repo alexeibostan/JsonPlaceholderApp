@@ -1,1 +1,6 @@
-<ab-user-list [users]="users$ | async" [selectedUser]="currentUser$ | async" (selected)="onSelectedUser($event)"></ab-user-list>
+<ab-user-list [users]="users$ | async" 
+[selectedUser]="currentUser$ | async" 
+(selected)="onSelectedUser($event)"
+(post)="goToPostsPage($event)"
+(loadUserPosts)="onLoadUserPosts($event)">
+</ab-user-list>

@@ -1,0 +1,6 @@
+<div class="mt-10">
+    <ul class="md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
+        <ab-post-item *ngFor="let post of posts" [post]="post" (click)="select.emit(post)"></ab-post-item>
+    </ul>
+</div>
+

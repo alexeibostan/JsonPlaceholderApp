@@ -1,10 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { Observable } from 'rxjs';
+
+import { User } from '../user';
+
 /** NgRx */
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
 import { getCurrentUser, getUsers, State } from '../state/user.reducer';
-import { User } from '../user';
-import { loadUsers, setCurrentUsers } from '../state/user.actions';
+import { loadUsers, setCurrentUsers, loadUsersPostsLength } from '../state/user.actions';
+
 
 @Component({
   selector: 'ab-user-page',
@@ -16,7 +21,7 @@ export class UserPageComponent implements OnInit {
   users$: Observable<User[]>;
   currentUser$: Observable<User>;
 
-  constructor(private store: Store<State>) { }
+  constructor(private store: Store<State>, private router: Router) { }
 
   ngOnInit(): void {
     this.users$ = this.store.select(getUsers);
@@ -27,6 +32,15 @@ export class UserPageComponent implements OnInit {
 
   onSelectedUser(user: User) {
     this.store.dispatch(setCurrentUsers({currentUserId: user.id}));
+  }
+
+  onLoadUserPosts(userId: number){
+    this.store.dispatch(loadUsersPostsLength({userId}));
+  }
+
+  goToPostsPage(user: User){
+    this.store.dispatch(setCurrentUsers({currentUserId: user.id}));
+    this.router.navigateByUrl(`/posts/${user.id}`)
   }
 
 }
